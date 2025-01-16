@@ -30,6 +30,7 @@ async function run() {
     const servicesCollection = client.db('diagnosticcenter').collection('services');
     const profileCollection = client.db('diagnosticcenter').collection('profile');
     const doctorsCollection = client.db('diagnosticcenter').collection('doctors');
+    const assignedPhysician = client.db('diagnosticcenter').collection('assignedphysicians');
 
     app.get('/services', async(req, res)=>{
       const result = await servicesCollection.find().toArray();
@@ -43,6 +44,15 @@ async function run() {
     app.get('/doctors', async(req, res)=>{
       const result = await doctorsCollection.find().toArray();
       res.send(result);
+    })
+    app.get('/assignedphysician', async(req, res)=>{
+      const result =await assignedPhysician.find().toArray();
+      res.send(result)
+    })
+    app.post('/assignedphysician', async(req, res)=>{
+      const newAssigned = req.body;
+      const result =await assignedPhysician.insertOne(newAssigned);
+      res.send(result)
     })
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
